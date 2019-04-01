@@ -48,6 +48,7 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $formatter = new \Salesfire\Formatter($this->getSiteId());
 
+        // Display transaction (set by Salesfire_Salesfire_Model_Observer)
         $ids = Mage::registry('salesfire_order_ids');
         $orderId = (is_array($ids) ? reset($ids) : null);
         if (! empty($orderId)) {
@@ -75,10 +76,13 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
             $formatter->addTransaction($transaction);
         }
 
+        // Display product view (set by Salesfire_Salesfire_Model_Observer)
         $ids = Mage::registry('salesfire_product_ids');
         $productId = (is_array($ids) ? reset($ids) : null);
         if (! empty($productId)) {
             $product = Mage::getModel('catalog/product')->load($productId);
+
+            // Calculate product tax
             $price = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), false), 2);
             $tax = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), true), 2) - $price;
 
