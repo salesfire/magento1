@@ -9,25 +9,48 @@
  */
 class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 {
+    protected $order;
+    protected $product;
+
     /**
-     * Return the site code in correct format
+     * Get current order
      *
-     * @return string
+     * @return order
      */
-    protected function _getSiteId()
+    protected function getOrder()
     {
-        $siteId = Mage::helper('salesfire')->getSiteId();
-        return trim($siteId);
+        if ($this->order) {
+            return $this->order;
+        }
+
+        $ids = Mage::registry('salesfire_order_ids');
+        $orderId = (is_array($ids) ? reset($ids) : null);
+
+        if (empty($orderId)) {
+            return null;
+        }
+
+        return $this->order = Mage::getModel('sales/order')->load($orderId);
     }
 
     /**
-     * Is salesfire available
+     * Get current product
      *
-     * @return bool
+     * @return product
      */
-    protected function _isAvailable()
+    protected function getProduct()
     {
-        return Mage::helper('salesfire')->isAvailable();
+        if ($this->product) {
+            return $this->product;
+        }
+
+        $ids = Mage::registry('salesfire_product_ids');
+        $productId = (is_array($ids) ? reset($ids) : null);
+        if (empty($productId)) {
+            return null;
+        }
+
+        return $this->product = Mage::getModel('catalog/product')->load($productId);
     }
 
     /**
@@ -37,10 +60,52 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
      */
     protected function _toHtml()
     {
-        if (!$this->_isAvailable()) {
+        if (! Mage::helper('salesfire')->isAvailable()) {
             return '';
         }
 
-        return Mage::helper('salesfire')->getScriptTag();
+        $formatter = new \Salesfire\Formatter(Mage::helper('salesfire')->getSiteId());
+
+        // Display transaction (set by Salesfire_Salesfire_Model_Observer)
+        if ($order = $this->getOrder()) {
+            $transaction = new \Salesfire\Types\Transaction([
+                'id'       => $order->getEntityId(),
+                'shipping' => round($order->getShippingAmount(), 2),
+                'currency' => $order->getOrderCurrencyCode(),
+                'coupon'   => $order->getCouponCode(),
+            ]);
+
+            foreach ($order->getAllVisibleItems() as $product) {
+                $transaction->addProduct(new \Salesfire\Types\Product([
+                    'sku'        => $product->getProductId(),
+                    'parent_sku' => $product->getProductId(),
+                    'name'       => $product->getName(),
+                    'price'      => round($product->getPrice(), 2),
+                    'tax'        => round($product->getTaxAmount(), 2),
+                    'quantity'   => round($product->getQtyOrdered()),
+                    'variant'    => implode(", ", array_map(function($item) {return $item['label'].': '.$item['value'];}, $product->getProductOptions()['attributes_info']))
+                ]));
+            }
+
+            $formatter->addTransaction($transaction);
+        }
+
+        // Display product view (set by Salesfire_Salesfire_Model_Observer)
+        if ($product = $this->getProduct()) {
+
+            // Calculate product tax
+            $price = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), false), 2);
+            $tax = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), true), 2) - $price;
+
+            $formatter->addProductView(new \Salesfire\Types\Product([
+                'sku'        => $product->getId(),
+                'parent_sku' => $product->getId(),
+                'name'       => $product->getName(),
+                'price'      => $price,
+                'tax'        => $tax,
+            ]));
+        }
+
+        return $formatter->toScriptTag();
     }
 }
