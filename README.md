@@ -19,7 +19,7 @@ You can find out more information and even get a free trial at https://www.sales
 
 ### Method 1: Extension Manager
 
-1. Add Salesfire to your magento account (https://marketplace.magento.com/salesfire-magento1.html)
+1. Add Salesfire to your magento account (https://marketplace.magento.com/salesfire-salesfire.html)
 2. Copy the access keys URL from within your magento marketplace account (Similar to https://connect20.magentocommerce.com/xxxx/salesfire+Salesfire-1.0.1)
 3. Navigate to the Magento Connect Manager within your store admin (System > Magento Connect > Magento Connect Manager)
 4. Paste the previously copied access keys URL into the `Install New Extensions` section then click Install
