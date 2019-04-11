@@ -10,6 +10,7 @@ services:
       - ./app/design/frontend/base/default/layout/salesfire.xml:/var/www/html/app/design/frontend/base/default/layout/salesfire.xml:cached
       - ./app/code/community/Salesfire:/var/www/html/app/code/community/Salesfire:cached
       - ./lib/Salesfire:/var/www/html/lib/Salesfire:cached
+      - ./dist:/var/www/html/var/connect
     links:
       - db
     env_file:

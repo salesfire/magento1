@@ -1,6 +1,5 @@
 <_>
-   <form_key>F2TVwkHStOCLhuNl</form_key>
-   <_create/>
+   <form_key>GuFlLpcQc6mJrwUj</form_key>
    <name>Salesfire</name>
    <channel>community</channel>
    <version_ids>
@@ -10,9 +9,10 @@
    <description>This module will add Salesfire onto your site.</description>
    <license>osl</license>
    <license_uri>https://opensource.org/licenses/OSL-3.0</license_uri>
-   <version>1.1.0</version>
+   <version>1.1.1</version>
    <stability>stable</stability>
-   <notes>Added tracking for orders</notes>
+   <notes>Updated Salesfire SDK
+Resolve Magento recommendations</notes>
    <authors>
       <name>
          <name>Stephen Honor</name>
@@ -41,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>          </files>
+            <files>           </files>
          </files>
       </package>
       <extension>
@@ -62,20 +62,24 @@
          <target>magecommunity</target>
          <target>magedesign</target>
          <target>mageetc</target>
+         <target>magelib</target>
       </target>
       <path>
          <path>Salesfire/Salesfire</path>
          <path>Salesfire/Salesfire</path>
          <path>frontend/base/default/layout/salesfire.xml</path>
          <path>modules/Salesfire_Salesfire.xml</path>
+         <path>Salesfire/Salesfire</path>
       </path>
       <type>
          <type>dir</type>
          <type>dir</type>
          <type>file</type>
          <type>file</type>
+         <type>dir</type>
       </type>
       <include>
+         <include/>
          <include/>
          <include/>
          <include/>
@@ -84,6 +88,7 @@
       <ignore>
          <ignore/>
          <ignore>.git</ignore>
+         <ignore/>
          <ignore/>
          <ignore/>
       </ignore>

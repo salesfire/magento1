@@ -83,7 +83,9 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
                     'price'      => round($product->getPrice(), 2),
                     'tax'        => round($product->getTaxAmount(), 2),
                     'quantity'   => round($product->getQtyOrdered()),
-                    'variant'    => implode(", ", array_map(function($item) {return $item['label'].': '.$item['value'];}, $product->getProductOptions()['attributes_info']))
+                    'variant'    => implode(", ", array_map(function($item) {
+                        return $item['label'].': '.$item['value'];
+                    }, $product->getProductOptions()['attributes_info']))
                 ]));
             }
 
