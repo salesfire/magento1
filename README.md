@@ -55,3 +55,7 @@ docker exec -ti <magento web container> install-magento
 ```
 
 If you want to use sample data, this must be added prior to running the install-magento command.
+
+Admin login details:
+
+admin / magentorocks1
