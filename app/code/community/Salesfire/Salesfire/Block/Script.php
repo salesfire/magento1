@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.1.2
+ * @version.   1.1.3
  */
 class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 {
@@ -81,7 +81,7 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
                 if (!empty($options) && !empty($options['attribute_info'])) {
                     $variant = implode(', ', array_map(function ($item) {
                         return $item['label'].': '.$item['value'];
-                    }, $options);
+                    }, $options['attribute_info']));
                 }
 
                 $transaction->addProduct(new \Salesfire\Types\Product([
