@@ -1,10 +1,28 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Salesfire config
+ *
+ * @category   Salesfire
+ * @package    Salesfire_Salesfire
+ * @version    1.2.0
+ */
+-->
 <config>
     <modules>
         <Salesfire_Salesfire>
-            <version>1.1.2</version>
+            <version>1.2.0</version>
         </Salesfire_Salesfire>
     </modules>
+
+    <crontab>
+        <jobs>
+            <salesfire_generate_feed>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
+                <run><model>salesfire/feed::generate</model></run>
+            </salesfire_generate_feed>
+        </jobs>
+    </crontab>
 
     <global>
         <models>
@@ -65,6 +83,15 @@
                 </observers>
             </checkout_multishipping_controller_success_action>
         </events>
+        <routers>
+            <salesfire>
+                <use>standard</use>
+                <args>
+                  <module>Salesfire_Salesfire</module>
+                  <frontName>salesfire</frontName>
+                </args>
+            </salesfire>
+        </routers>
     </frontend>
     <default>
         <salesfire>
