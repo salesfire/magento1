@@ -133,7 +133,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                     $this->printLine($siteId, '<sale_price currency="' . $currency . '">' . $this->getProductSalePrice($product, $currency, $bundlePriceModel) . '</sale_price>', 3);
 
-                    $this->printLine($siteId, '<mpn>'.$product->getSku().'</mpn>', 3);
+                    $this->printLine($siteId, '<mpn><![CDATA['.$product->getSku().']]></mpn>', 3);
 
                     $this->printLine($siteId, '<url href="' . $product->getProductUrl() . '" primary="true" />', 3);
 
@@ -269,7 +269,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                 foreach ($brands as $brand => $brandId) {
                     $this->printLine($siteId, '<brand id="brand_'.$brandId.'">', 2);
-                    $this->printLine($siteId, '<name>'.$brand.'</name>', 3);
+                    $this->printLine($siteId, '<name><![CDATA['.$brand.']]></name>', 3);
                     $this->printLine($siteId, '</brand>', 2);
                 }
 
