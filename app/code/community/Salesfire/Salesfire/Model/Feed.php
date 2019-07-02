@@ -21,10 +21,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
     public function escapeString($text)
     {
-        $doc = new DOMDocument();
-        $fragment = $doc->createDocumentFragment();
-        $fragment->appendChild($doc->createTextNode(utf8_encode($text)));
-        return $doc->saveXML($fragment);
+        return html_entity_decode(trim(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', utf8_encode($text))));
     }
 
     public function generate()
@@ -90,7 +87,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                     $this->printLine($siteId, '<category id="category_'.$category->getId().'"'.($parent && $parent->getLevel() > 1 ? ' parent="category_'.$parent->getId(). '"' : '').'>', 2);
 
-                    $this->printLine($siteId, '<name><![CDATA['.$category->getName().']]></name>', 3);
+                    $this->printLine($siteId, '<name><![CDATA['.$this->escapeString($category->getName()).']]></name>', 3);
 
                     $description = $category->getDescription();
                     if (! empty($description)) {
@@ -103,7 +100,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                     if (! empty($keywords)) {
                         $this->printLine($siteId, '<keywords>', 3);
                         foreach (explode(',', $keywords) as $keyword) {
-                            $this->printLine($siteId, '<keyword><![CDATA['.trim($keyword).']]></keyword>', 4);
+                            $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
                         }
                         $this->printLine($siteId, '</keywords>', 3);
                     }
@@ -125,22 +122,22 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                 foreach ($products as $product) {
                     $this->printLine($siteId, '<product id="product_'.$product->getId().'">', 2);
 
-                    $this->printLine($siteId, '<title><![CDATA[' . $product->getName() . ']]></title>', 3);
+                    $this->printLine($siteId, '<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3);
 
-                    $this->printLine($siteId, '<description><![CDATA[' . substr(Mage::helper('core')->escapeHtml(strip_tags($product->getDescription())), 0, 5000) . ']]></description>', 3);
+                    $this->printLine($siteId, '<description><![CDATA[' . $this->escapeString(substr(Mage::helper('core')->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3);
 
                     $this->printLine($siteId, '<price currency="' . $currency . '">' . $this->getProductPrice($product, $currency, $bundlePriceModel) . '</price>', 3);
 
                     $this->printLine($siteId, '<sale_price currency="' . $currency . '">' . $this->getProductSalePrice($product, $currency, $bundlePriceModel) . '</sale_price>', 3);
 
-                    $this->printLine($siteId, '<mpn><![CDATA['.$product->getSku().']]></mpn>', 3);
+                    $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3);
 
                     $this->printLine($siteId, '<url href="' . $product->getProductUrl() . '" primary="true" />', 3);
 
                     if (! empty($gender_code)) {
                         $gender = $product->getResource()->getAttribute($gender_code)->setStoreId($storeId)->getFrontend()->getValue($product);
                         if ($gender != 'No') {
-                            $this->printLine($siteId, '<gender><![CDATA['.$gender.']]></gender>', 3);
+                            $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
                         }
                     }
 
@@ -176,7 +173,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                     if (! empty($keywords)) {
                         $this->printLine($siteId, '<keywords>', 3);
                         foreach (explode(',', $keywords) as $keyword) {
-                            $this->printLine($siteId, '<keyword><![CDATA['.trim($keyword).']]></keyword>', 4);
+                            $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
                         }
                         $this->printLine($siteId, '</keywords>', 3);
                     }
@@ -202,14 +199,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                 $this->printLine($siteId, '<variant id="product_variant_'.$childProduct->getId().'">', 4);
 
                                 foreach($currentAttributes as $attribute) {
+                                    $attribute = trim($attribute);
+
                                     $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
                                     if ($text != 'No') {
-                                        $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$text.']]></'.$attribute.'>', 5);
+                                        $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
                                     }
                                 }
 
-                                $this->printLine($siteId, '<mpn><![CDATA['.$childProduct->getSku().']]></mpn>', 5);
+                                $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5);
 
                                 $this->printLine($siteId, '<stock>'.($childProduct->getStockItem() && $childProduct->getStockItem()->getIsInStock() ? ($childProduct->getStockItem()->getQty() > 0 ? (int) $childProduct->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
@@ -229,14 +228,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         $this->printLine($siteId, '<variant id="product_variant_'.$product->getId().'">', 4);
 
                         foreach($currentAttributes as $attribute) {
+                            $attribute = trim($attribute);
+
                             $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if ($text != 'No') {
-                                $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$text.']]></'.$attribute.'>', 5);
+                                $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
                             }
                         }
 
-                        $this->printLine($siteId, '<mpn><![CDATA['.$product->getSku().']]></mpn>', 5);
+                        $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5);
 
                         $this->printLine($siteId, '<stock>'.($product->getStockItem() && $product->getStockItem()->getIsInStock() ? ($product->getStockItem()->getQty() > 0 ? (int) $product->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
@@ -269,7 +270,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                 foreach ($brands as $brand => $brandId) {
                     $this->printLine($siteId, '<brand id="brand_'.$brandId.'">', 2);
-                    $this->printLine($siteId, '<name><![CDATA['.$brand.']]></name>', 3);
+                    $this->printLine($siteId, '<name><![CDATA['.$this->escapeString($brand).']]></name>', 3);
                     $this->printLine($siteId, '</brand>', 2);
                 }
 
