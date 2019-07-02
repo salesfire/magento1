@@ -282,8 +282,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             @rename(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml', Mage::getBaseDir('media').'/catalog/'.$siteId.'.xml');
             @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
         }
-
-        exit;
     }
 
     public function getCategories($storeId)
