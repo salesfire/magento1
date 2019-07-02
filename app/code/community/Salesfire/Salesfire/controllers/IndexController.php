@@ -11,12 +11,13 @@ class Salesfire_Salesfire_IndexController extends Mage_Core_Controller_Front_Act
 {
     public function indexAction()
     {
-        echo implode(',', [
+        $this->setFlag('', self::FLAG_NO_POST_DISPATCH, 1);
+        $response = $this->getResponse();
+        $response->setBody(implode(',', [
             '1.2.0',
             Mage::helper('salesfire')->isEnabled() ? '1' : '0',
             Mage::helper('salesfire')->getSiteId(),
             Mage::helper('salesfire')->isFeedEnabled() ? '1' : '0',
-        ]);
-        exit;
+        ]));
     }
 }
