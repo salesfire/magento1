@@ -1,5 +1,19 @@
 # Changelog
 
+### Salesfire v1.2.1
+Released on 2019-09-19
+Release notes:
+
+- Adding changes to product feed
+
+
+### Salesfire v1.2.0
+Released on 2019-07-25
+Release notes:
+
+- Added product feed
+
+
 ### Salesfire v1.1.2
 Released on 2019-06-04
 Release notes:

@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.0
+ * @version.   1.2.1
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -59,7 +59,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             if (! Mage::helper('salesfire')->isFeedEnabled($storeId)) {
                 continue;
             }
-
             $siteId = Mage::helper('salesfire')->getSiteId($storeId);
             $brand_code = Mage::helper('salesfire')->getBrandCode($storeId);
             $gender_code = Mage::helper('salesfire')->getGenderCode($storeId);
@@ -77,6 +76,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'">', 0);
 
             $categories = $this->getCategories($storeId);
+
             if (! empty($categories)) {
                 $this->printLine($siteId, '<categories>', 1);
                 foreach ($categories as $category) {
@@ -85,16 +85,20 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         continue;
                     }
 
-                    $this->printLine($siteId, '<category id="category_'.$category->getId().'"'.($parent && $parent->getLevel() > 1 ? ' parent="category_'.$parent->getId(). '"' : '').'>', 2);
+                    $this->printLine($siteId, '<category id="category_' . $category->getId() . '"' . ($parent && $parent->getLevel() > 1 ? ' parent="category_'.$parent->getId(). '"' : '') . '>', 2);
+
+                    $this->printLine($siteId, '<id>' . $this->escapeString($category->getId()) . '</id>', 3);
 
                     $this->printLine($siteId, '<name><![CDATA['.$this->escapeString($category->getName()).']]></name>', 3);
+
+                    $this->printLine($siteId, '<breadcrumb><![CDATA['.$this->escapeString($this->getCategoryBreadcrumb($storeId, $category)).']]></breadcrumb>', 3);
 
                     $description = $category->getDescription();
                     if (! empty($description)) {
                         $this->printLine($siteId, '<description><![CDATA['.$this->escapeString($description).']]></description>', 3);
                     }
 
-                    $this->printLine($siteId, '<url href="'.$category->getUrl().'" />', 3);
+                    $this->printLine($siteId, '<link>' . $category->getUrl() . '</link>', 3);
 
                     $keywords = $category->getMetaKeywords();
                     if (! empty($keywords)) {
@@ -122,6 +126,8 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                 foreach ($products as $product) {
                     $this->printLine($siteId, '<product id="product_'.$product->getId().'">', 2);
 
+                    $this->printLine($siteId, '<id><' . $product->getId() . '</id>', 3);
+
                     $this->printLine($siteId, '<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3);
 
                     $this->printLine($siteId, '<description><![CDATA[' . $this->escapeString(substr(Mage::helper('core')->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3);
@@ -132,7 +138,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                     $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3);
 
-                    $this->printLine($siteId, '<url href="' . $product->getProductUrl() . '" primary="true" />', 3);
+                    $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 3);
 
                     if (! empty($gender_code)) {
                         $gender = $product->getResource()->getAttribute($gender_code)->setStoreId($storeId)->getFrontend()->getValue($product);
@@ -144,20 +150,10 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                     if (! empty($brand_code)) {
                         $brand = $product->getResource()->getAttribute($brand_code)->setStoreId($storeId)->getFrontend()->getValue($product);
                         if ($brand != 'No') {
-                            if (! isset($brands[$brand])) {
-                                $brands[$brand] = count($brands) + 1;
-                            }
-                            $brandId = $brands[$brand];
-
-                            $this->printLine($siteId, '<brand id="brand_'.$brandId.'" />', 3);
+                            $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
                         }
                     } else if (! empty($default_brand)) {
-                        if (! isset($brands[$default_brand])) {
-                            $brands[$default_brand] = count($brands) + 1;
-                        }
-                        $brandId = $brands[$brand];
-
-                        $this->printLine($siteId, '<brand id="brand_'.$brandId.'" />', 3);
+                        $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
                     }
 
                     $categories = $product->getCategoryIds();
@@ -196,10 +192,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         if (count($childProducts) > 0) {
                             foreach ($childProducts as $childProduct) {
-                                $this->printLine($siteId, '<variant id="product_variant_'.$childProduct->getId().'">', 4);
+                                $this->printLine($siteId, '<variant>', 4);
+
+                                $this->printLine($siteId, '<id>' . $childProduct->getId() . '</id>', 5);
 
                                 foreach($currentAttributes as $attribute) {
                                     $attribute = trim($attribute);
+
+                                    if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock'])) {
+                                        continue;
+                                    }
 
                                     $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
@@ -212,20 +214,20 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<stock>'.($childProduct->getStockItem() && $childProduct->getStockItem()->getIsInStock() ? ($childProduct->getStockItem()->getQty() > 0 ? (int) $childProduct->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
-                                $this->printLine($siteId, '<url href="'.$product->getProductUrl().'" />', 5);
+                                $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
                                 $image = $childProduct->getImage();
                                 if (! empty($image)) {
-                                    $this->printLine($siteId, '<images>', 5);
-                                    $this->printLine($siteId, '<image src="'.$mediaUrl.'catalog/product'.$image.'" primary="true" />', 6);
-                                    $this->printLine($siteId, '</images>', 5);
+                                    $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
                             }
                         }
                     } else {
-                        $this->printLine($siteId, '<variant id="product_variant_'.$product->getId().'">', 4);
+                        $this->printLine($siteId, '<variant>', 4);
+
+                        $this->printLine($siteId, '<id>' . $product->getId() . '</id>', 5);
 
                         foreach($currentAttributes as $attribute) {
                             $attribute = trim($attribute);
@@ -241,13 +243,11 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<stock>'.($product->getStockItem() && $product->getStockItem()->getIsInStock() ? ($product->getStockItem()->getQty() > 0 ? (int) $product->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
-                        $this->printLine($siteId, '<url href="'.$product->getProductUrl().'" />', 5);
+                        $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
                         $image = $product->getImage();
                         if (! empty($image)) {
-                            $this->printLine($siteId, '<images>', 5);
-                            $this->printLine($siteId, '<image src="'.$mediaUrl.'catalog/product'.$image.'" primary="true" />', 6);
-                            $this->printLine($siteId, '</images>', 5);
+                            $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
@@ -265,18 +265,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                 $this->printLine($siteId, '</products>', 1);
             }
 
-            if (count($brands) > 0) {
-                $this->printLine($siteId, '<brands count="'.(count($brands)).'">', 1);
-
-                foreach ($brands as $brand => $brandId) {
-                    $this->printLine($siteId, '<brand id="brand_'.$brandId.'">', 2);
-                    $this->printLine($siteId, '<name><![CDATA['.$this->escapeString($brand).']]></name>', 3);
-                    $this->printLine($siteId, '</brand>', 2);
-                }
-
-                $this->printLine($siteId, '</brands>', 1);
-            }
-
             $this->printLine($siteId, '</productfeed>', 0);
 
             @rename(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml', Mage::getBaseDir('media').'/catalog/'.$siteId.'.xml');
@@ -286,14 +274,31 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
     public function getCategories($storeId)
     {
-        $rootid     = Mage::app()->getStore($storeId)->getRootCategoryId();
+        $rootCategoryId = Mage::app()->getStore($storeId)->getRootCategoryId();
         $categories = Mage::getModel('catalog/category')
             ->getCollection()
-            ->addFieldToFilter('path', array('like'=> "1/".$rootid."/%"))
-            ->addAttributeToSelect('*')
-            ->addIsActiveFilter();
+            ->setStoreId($storeId)
+            ->addFieldToFilter('is_active', 1)
+            ->addAttributeToFilter('path', array('like' => "1/{$rootCategoryId}/%"))
+            ->addAttributeToSelect('*');
 
         return $categories;
+    }
+
+    public function getCategoryBreadcrumb($storeId, $category, $breadcrumb='')
+    {
+        if (! empty($breadcrumb)) {
+            $breadcrumb = ' > ' . $breadcrumb;
+        }
+
+        $breadcrumb = $category->getName() . $breadcrumb;
+
+        $parent = $category->getParentCategory()->setStoreId($storeId);
+        if ($parent && $parent->getLevel() > 1) {
+            return $this->getCategoryBreadcrumb($storeId, $parent, $breadcrumb);
+        }
+
+        return $breadcrumb;
     }
 
     protected function getVisibleProducts($storeId, $curPage=1, $pageSize=100)
