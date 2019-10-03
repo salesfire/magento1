@@ -88,7 +88,7 @@
                 <use>standard</use>
                 <args>
                   <module>Salesfire_Salesfire</module>
-                  <frontName>salesfire</frontName>
+                  <frontName>salesfire/index/index</frontName>
                 </args>
             </salesfire>
         </routers>

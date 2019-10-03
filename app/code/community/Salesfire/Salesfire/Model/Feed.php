@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.1
+ * @version.   1.2.2
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -126,7 +126,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                 foreach ($products as $product) {
                     $this->printLine($siteId, '<product id="product_'.$product->getId().'">', 2);
 
-                    $this->printLine($siteId, '<id><' . $product->getId() . '</id>', 3);
+                    $this->printLine($siteId, '<id>' . $product->getId() . '</id>', 3);
 
                     $this->printLine($siteId, '<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3);
 

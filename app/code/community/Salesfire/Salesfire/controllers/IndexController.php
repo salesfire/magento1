@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.0
+ * @version    1.2.2
  */
 class Salesfire_Salesfire_IndexController extends Mage_Core_Controller_Front_Action
 {
@@ -14,10 +14,11 @@ class Salesfire_Salesfire_IndexController extends Mage_Core_Controller_Front_Act
         $this->setFlag('', self::FLAG_NO_POST_DISPATCH, 1);
         $response = $this->getResponse();
         $response->setBody(implode(',', [
-            '1.2.0',
+            '1.2.2',
             Mage::helper('salesfire')->isEnabled() ? '1' : '0',
             Mage::helper('salesfire')->getSiteId(),
             Mage::helper('salesfire')->isFeedEnabled() ? '1' : '0',
+            Mage::getVersion(),
         ]));
     }
 }
