@@ -5,20 +5,20 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.0
+ * @version    1.2.2
  */
 -->
 <config>
     <modules>
         <Salesfire_Salesfire>
-            <version>1.2.0</version>
+            <version>1.2.2</version>
         </Salesfire_Salesfire>
     </modules>
 
     <crontab>
         <jobs>
             <salesfire_generate_feed>
-                <schedule><cron_expr>* * * * *</cron_expr></schedule>
+                <schedule><cron_expr>0 1 * * *</cron_expr></schedule>
                 <run><model>salesfire/feed::generate</model></run>
             </salesfire_generate_feed>
         </jobs>
