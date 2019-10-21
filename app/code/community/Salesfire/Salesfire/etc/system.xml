@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.0
+ * @version    1.2.3
  */
 -->
 <config>
@@ -112,10 +112,35 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
                         </gender_code>
+                        <age_group_code translate="label">
+                            <label>Age Group Attribute Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </gender_code>
+                        <colour_code translate="label">
+                            <label>Colour Attribute Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </colour_code>
+                        <attribute_codes translate="label">
+                            <label>Additional Attribute Codes</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Comma separated list of attribute codes to put in feed. E.g: material,size</comment>
+                        </attribute_codes>
                         <feed_url translate="label">
                             <label>Feed URL</label>
                             <frontend_model>salesfire/adminhtml_system_config_feed</frontend_model>
-                            <sort_order>110</sort_order>
+                            <sort_order>80</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>

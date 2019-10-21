@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.2
+ * @version.   1.2.3
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -29,23 +29,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
         $bundlePriceModel = Mage::getModel('bundle/product_price');
 
-        $entityTypeId = Mage::getModel('eav/entity')
-                ->setType('catalog_product')
-                ->getTypeId();
-        $attributeSetName = 'Default';
-        $defaultAttributeSetId = Mage::getModel('eav/entity_attribute_set')
-                ->getCollection()
-                ->setEntityTypeFilter($entityTypeId)
-                ->addFieldToFilter('attribute_set_name', $attributeSetName)
-                ->getFirstItem()
-                ->getAttributeSetId();
-
-        $defaultAttributes = Mage::getModel('catalog/product_attribute_api')->items($defaultAttributeSetId);
-        $defaultAttributeCodes = array();
-        foreach ($defaultAttributes as $attributes) {
-            $defaultAttributeCodes[] = $attributes['code'];
-        }
-
         $storeCollection = Mage::getModel('core/store')->getCollection();
         foreach ($storeCollection as $store)
         {
@@ -59,9 +42,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             if (! Mage::helper('salesfire')->isFeedEnabled($storeId)) {
                 continue;
             }
+
             $siteId = Mage::helper('salesfire')->getSiteId($storeId);
             $brand_code = Mage::helper('salesfire')->getBrandCode($storeId);
             $gender_code = Mage::helper('salesfire')->getGenderCode($storeId);
+            $age_group_code = Mage::helper('salesfire')->getAgeGroupCode($storeId);
+            $colour_code = Mage::helper('salesfire')->getColourCode($storeId);
+            $attribute_codes = Mage::helper('salesfire')->getAttributeCodes($storeId);
             $default_brand = Mage::helper('salesfire')->getDefaultBrand($storeId);
 
             @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
@@ -147,6 +134,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         }
                     }
 
+                    if (! empty($age_group_code)) {
+                        $age_group = $product->getResource()->getAttribute($age_group_code)->setStoreId($storeId)->getFrontend()->getValue($product);
+                        if ($age_group != 'No') {
+                            $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
+                        }
+                    }
+
                     if (! empty($brand_code)) {
                         $brand = $product->getResource()->getAttribute($brand_code)->setStoreId($storeId)->getFrontend()->getValue($product);
                         if ($brand != 'No') {
@@ -174,15 +168,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         $this->printLine($siteId, '</keywords>', 3);
                     }
 
-                    $attributeSetId = $product->getAttributeSetId();
-                    $specificAttributes = Mage::getModel('catalog/product_attribute_api')->items($attributeSetId);
-                    $attributeCodes = array();
-                    foreach ($specificAttributes as $attributes) {
-                        $attributeCodes[] = $attributes['code'];
-                    }
-
-                    $currentAttributes = array_diff($attributeCodes, $defaultAttributeCodes);
-
                     $this->printLine($siteId, '<variants>', 3);
 
                     if ($product->isConfigurable()) {
@@ -196,10 +181,10 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<id>' . $childProduct->getId() . '</id>', 5);
 
-                                foreach($currentAttributes as $attribute) {
+                                foreach($attribute_codes as $attribute) {
                                     $attribute = trim($attribute);
 
-                                    if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock'])) {
+                                    if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code])) {
                                         continue;
                                     }
 
@@ -207,6 +192,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                     if ($text != 'No') {
                                         $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
+                                    }
+                                }
+
+                                if (! empty($colour_code)) {
+                                    $colour = $childProduct->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
+                                    if ($colour != 'No') {
+                                        $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
                                 }
 
@@ -229,13 +221,24 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<id>' . $product->getId() . '</id>', 5);
 
-                        foreach($currentAttributes as $attribute) {
+                        foreach($attribute_codes as $attribute) {
                             $attribute = trim($attribute);
+
+                            if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code])) {
+                                continue;
+                            }
 
                             $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if ($text != 'No') {
                                 $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
+                            }
+                        }
+
+                        if (! empty($colour_code)) {
+                            $colour = $product->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($product);
+                            if ($colour != 'No') {
+                                $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                             }
                         }
 
