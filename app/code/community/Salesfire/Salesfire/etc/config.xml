@@ -99,6 +99,9 @@
                 <is_enabled>0</is_enabled>
                 <site_id></site_id>
             </general>
+            <feed>
+                <is_enabled>0</is_enabled>
+            </feed>
         </salesfire>
     </default>
 </config>
