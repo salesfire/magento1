@@ -30,7 +30,7 @@ class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
         $action = $observer->getEvent()->getControllerAction();
 
         if ($action instanceof Mage_Catalog_ProductController && $action->getRequest()->getActionName() == 'view') {
-            Mage::register('salesfire_product_ids', [$action->getRequest()->getParam('id')], true);
+            Mage::register('salesfire_product_ids', array($action->getRequest()->getParam('id')), true);
         }
     }
 

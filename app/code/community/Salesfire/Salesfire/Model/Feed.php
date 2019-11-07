@@ -184,7 +184,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                 foreach($attribute_codes as $attribute) {
                                     $attribute = trim($attribute);
 
-                                    if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code])) {
+                                    if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
                                         continue;
                                     }
 
@@ -224,7 +224,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         foreach($attribute_codes as $attribute) {
                             $attribute = trim($attribute);
 
-                            if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code])) {
+                            if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
                                 continue;
                             }
 

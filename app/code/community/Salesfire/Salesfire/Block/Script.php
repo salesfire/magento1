@@ -84,7 +84,7 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
                     }, $options['attribute_info']));
                 }
 
-                $transaction->addProduct(new \Salesfire\Types\Product([
+                $transaction->addProduct(new \Salesfire\Types\Product(array(
                     'sku'        => $product->getProductId(),
                     'parent_sku' => $product->getProductId(),
                     'name'       => $product->getName(),
@@ -92,7 +92,7 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
                     'tax'        => round($product->getTaxAmount(), 2),
                     'quantity'   => round($product->getQtyOrdered()),
                     'variant'    => $variant,
-                ]));
+                )));
             }
 
             $formatter->addTransaction($transaction);
@@ -105,13 +105,13 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
             $price = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), false), 2);
             $tax = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), true), 2) - $price;
 
-            $formatter->addProductView(new \Salesfire\Types\Product([
+            $formatter->addProductView(new \Salesfire\Types\Product(array(
                 'sku'        => $product->getId(),
                 'parent_sku' => $product->getId(),
                 'name'       => $product->getName(),
                 'price'      => $price,
                 'tax'        => $tax,
-            ]));
+            )));
         }
 
         return $formatter->toScriptTag();
