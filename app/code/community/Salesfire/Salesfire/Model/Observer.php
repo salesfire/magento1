@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.1.0
+ * @version.   1.2.4
  */
 class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
 {

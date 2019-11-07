@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.1.3
+ * @version.   1.2.4
  */
 class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 {

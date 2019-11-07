@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.1
+ * @version    1.2.4
  */
 class Salesfire_Salesfire_Block_Adminhtml_System_Config_Feed extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface
 {
