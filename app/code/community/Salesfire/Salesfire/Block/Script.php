@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.4
+ * @version.   1.2.5
  */
 class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 {
@@ -23,14 +23,17 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
             return $this->order;
         }
 
-        $ids = Mage::registry('salesfire_order_ids');
-        $orderId = (is_array($ids) ? reset($ids) : null);
+        $checkoutSession = Mage::getSingleton('checkout/session');
+        if (empty($checkoutSession)) {
+            return null;
+        }
 
+        $orderId = $checkoutSession->getLastRealOrderId();
         if (empty($orderId)) {
             return null;
         }
 
-        return $this->order = Mage::getModel('sales/order')->load($orderId);
+        return $this->order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
     }
 
     /**
@@ -44,8 +47,12 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
             return $this->product;
         }
 
-        $ids = Mage::registry('salesfire_product_ids');
-        $productId = (is_array($ids) ? reset($ids) : null);
+        $currentProduct = Mage::registry('current_product');
+        if (empty($currentProduct)) {
+            return null;
+        }
+
+        $productId = $currentProduct->getId();
         if (empty($productId)) {
             return null;
         }
@@ -67,7 +74,8 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
         $formatter = new \Salesfire\Formatter(Mage::helper('salesfire')->getSiteId());
 
         // Display transaction (set by Salesfire_Salesfire_Model_Observer)
-        if ($order = $this->getOrder()) {
+        $action = Mage::app()->getFrontController()->getAction();
+        if ((! $action || $action->getFullActionName() == 'checkout_onepage_success') && $order = $this->getOrder()) {
             $transaction = new \Salesfire\Types\Transaction([
                 'id'       => $order->getEntityId(),
                 'shipping' => round($order->getShippingAmount(), 2),
@@ -100,7 +108,6 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 
         // Display product view (set by Salesfire_Salesfire_Model_Observer)
         if ($product = $this->getProduct()) {
-
             // Calculate product tax
             $price = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), false), 2);
             $tax = round(Mage::helper('tax')->getPrice($product, $product->getFinalPrice(), true), 2) - $price;

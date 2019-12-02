@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.4
+ * @version.   1.2.5
  */
 class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
 {
@@ -18,20 +18,6 @@ class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
     public function controllerFrontInitBefore(Varien_Event_Observer $observer)
     {
         spl_autoload_register( array($this, 'load'), true, true );
-    }
-
-    public function setOrder(Varien_Event_Observer $observer)
-    {
-        Mage::register('salesfire_order_ids', $observer->getEvent()->getOrderIds(), true);
-    }
-
-    public function setProduct(Varien_Event_Observer $observer)
-    {
-        $action = $observer->getEvent()->getControllerAction();
-
-        if ($action instanceof Mage_Catalog_ProductController && $action->getRequest()->getActionName() == 'view') {
-            Mage::register('salesfire_product_ids', array($action->getRequest()->getParam('id')), true);
-        }
     }
 
     /**
