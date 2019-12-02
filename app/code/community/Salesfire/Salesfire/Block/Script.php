@@ -75,7 +75,7 @@ class Salesfire_Salesfire_Block_Script extends Mage_Core_Block_Template
 
         // Display transaction (set by Salesfire_Salesfire_Model_Observer)
         $action = Mage::app()->getFrontController()->getAction();
-        if ((! $action || $action->getFullActionName() == 'checkout_onepage_success') && $order = $this->getOrder()) {
+        if ((! $action || $action->getFullActionName() == 'checkout_onepage_success' || $action->getFullActionName() == 'checkout_multishipping_success') && $order = $this->getOrder()) {
             $transaction = new \Salesfire\Types\Transaction([
                 'id'       => $order->getEntityId(),
                 'shipping' => round($order->getShippingAmount(), 2),
