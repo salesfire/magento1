@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.3
+ * @version    1.2.6
  */
 class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -87,6 +87,17 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     public function getBrandCode($storeId = null)
     {
         return trim(Mage::getStoreConfig(self::XML_PATH_FEED_BRAND_CODE, $storeId));
+    }
+
+    /**
+     * Get the product colour attribute code
+     *
+     * @param string $storeId
+     * @return string
+     */
+    public function getColourCode($storeId = null)
+    {
+        return trim(Mage::getStoreConfig(self::XML_PATH_FEED_COLOUR_CODE, $storeId));
     }
 
     /**

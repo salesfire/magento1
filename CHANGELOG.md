@@ -1,5 +1,26 @@
 # Changelog
 
+### Salesfire v1.2.6
+Released on 2020-01-10
+Release notes:
+
+- Fix issue with missing colour attribute function for feed
+
+
+### Salesfire v1.2.5
+Released on 2019-12-02
+Release notes:
+
+- Added changes for tracking on checkout
+
+
+### Salesfire v1.2.4
+Released on 2019-11-07
+Release notes:
+
+- Change PHP7 code to PHP5
+
+
 ### Salesfire v1.2.3
 Released on 2019-10-21
 Release notes:
