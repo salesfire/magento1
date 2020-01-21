@@ -9,21 +9,21 @@
  */
 class Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes
 {
-    public function toOptionArray($withEmpty = true)
+    public function toOptionArray()
     {
         $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
             ->addVisibleFilter()
             ->getItems();
 
         $options = array_map(function($attribute) {
-            return [
+            return array(
                 'value' => $attribute->attribute_code,
                 'label' => $attribute->frontend_label . ' (' . $attribute->attribute_code . ')',
-            ];
+            );
         }, $attributes);
 
-        return [
+        return array(
             '' => '(None)',
-        ] + $options;
+        ) + $options;
     }
 }
