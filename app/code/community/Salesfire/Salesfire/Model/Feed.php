@@ -26,6 +26,15 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
     public function generate()
     {
+        Salesfire_Salesfire_Helper_Data::listenForErrors(true);
+
+        $this->runGenerator();
+
+        Salesfire_Salesfire_Helper_Data::listenForErrors(false);
+    }
+
+    private function runGenerator()
+    {
         $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
         $bundlePriceModel = Mage::getModel('bundle/product_price');
 

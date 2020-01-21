@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.3
+ * @version    1.2.7
  */
 -->
 <config>
@@ -87,6 +87,7 @@
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>Whether you want to generate product feed.</comment>
                         </is_enabled>
                         <default_brand translate="label">
                             <label>Default Brand</label>
@@ -95,38 +96,47 @@
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>Leave blank if you have no brands.</comment>
                         </default_brand>
                         <brand_code translate="label">
                             <label>Brand Attribute Code</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is the Brand. For example, sometimes it's called manufacturer.</comment>
                         </brand_code>
                         <gender_code translate="label">
                             <label>Gender Attribute Code</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
                             <sort_order>40</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is Gender.</comment>
                         </gender_code>
                         <age_group_code translate="label">
                             <label>Age Group Attribute Code</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
                             <sort_order>50</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is Age Group.</comment>
                         </age_group_code>
                         <colour_code translate="label">
                             <label>Colour Attribute Code</label>
-                            <frontend_type>text</frontend_type>
+                            <frontend_type>select</frontend_type>
                             <sort_order>60</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is Colour.</comment>
                         </colour_code>
                         <attribute_codes translate="label">
                             <label>Additional Attribute Codes</label>
@@ -144,6 +154,7 @@
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>Please provide your Salesfire contact with this URL.</comment>
                         </feed_url>
                     </fields>
                 </feed>

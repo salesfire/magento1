@@ -22,6 +22,10 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
     const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
 
+    static $errorHandlerEnabled = false;
+
+    static $errorHandlerRegistered = false;
+
     /**
      * Whether salesfire is ready to use
      *
@@ -131,5 +135,59 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     public function getAttributeCodes($storeId = null)
     {
         return explode(',', trim(Mage::getStoreConfig(self::XML_PATH_FEED_ATTRIBUTE_CODES, $storeId)));
+    }
+
+    public static function listenForErrors($enabled = false)
+    {
+        static::$errorHandlerEnabled = $enabled;
+
+        if ($enabled && ! static::$errorHandlerRegistered) {
+            register_shutdown_function(array('Salesfire_Salesfire_Helper_Data', 'errorHandler'));
+
+            static::$errorHandlerRegistered = true;
+        }
+    }
+
+    public static function errorHandler() {
+        if (! static::$errorHandlerEnabled) {
+            return;
+        }
+
+        $error = error_get_last();
+
+        if ($error !== null) {
+            $stores = Mage::getModel('core/store')->getCollection();
+
+            $site_uuids = array();
+
+            foreach ($stores as $store) {
+                $store_id = $store->getId();
+
+                Mage::app()->setCurrentStore($store_id);
+
+                if ($site_id = Mage::helper('salesfire')->getSiteId($store_id)) {
+                    $site_uuids[] = $site_id;
+                }
+            }
+
+            $payload = json_encode(array(
+                'client'        => 'salesfire-magento-1',
+                'site_uuids'    => $site_uuids,
+                'error' => [
+                    'type'  => $error["type"],
+                    'file'  => $error["file"],
+                    'line'  => $error["line"],
+                    'str'   => $error["message"],
+                ],
+            ));
+
+            $ch = curl_init('https://api.salesfire.co.uk/extensions/errors');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+
+            $result = curl_exec($ch);
+            curl_close($ch);
+        }
     }
 }

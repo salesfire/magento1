@@ -5,13 +5,13 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.5
+ * @version    1.2.7
  */
 -->
 <config>
     <modules>
         <Salesfire_Salesfire>
-            <version>1.2.5</version>
+            <version>1.2.7</version>
         </Salesfire_Salesfire>
     </modules>
 
@@ -64,7 +64,7 @@
                 <use>standard</use>
                 <args>
                   <module>Salesfire_Salesfire</module>
-                  <frontName>salesfire/index/index</frontName>
+                  <frontName>salesfire</frontName>
                 </args>
             </salesfire>
         </routers>

@@ -49,12 +49,13 @@ After installing you will need to enter your Salesfire details by following the 
 
 You can setup a test magento using the following script:
 
+If you want to use sample data, this must be added prior to running the install-magento command. (It's temperamental.)
+
 ```
 docker-compose up -d
+docker exec -ti <magento web container> install-sampledata
 docker exec -ti <magento web container> install-magento
 ```
-
-If you want to use sample data, this must be added prior to running the install-magento command.
 
 Admin login details:
 
