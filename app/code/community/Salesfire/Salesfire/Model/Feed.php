@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.4
+ * @version.   1.2.8
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -39,8 +39,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         $bundlePriceModel = Mage::getModel('bundle/product_price');
 
         $storeCollection = Mage::getModel('core/store')->getCollection();
-        foreach ($storeCollection as $store)
-        {
+        foreach ($storeCollection as $store) {
             $storeId = $store->getId();
             Mage::app()->setCurrentStore($storeId);
 
@@ -102,11 +101,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         foreach (explode(',', $keywords) as $keyword) {
                             $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
                         }
+
                         $this->printLine($siteId, '</keywords>', 3);
                     }
 
                     $this->printLine($siteId, '</category>', 2);
                 }
+
                 $this->printLine($siteId, '</categories>', 1);
             }
 
@@ -165,6 +166,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         foreach ($categories as $categoryId) {
                             $this->printLine($siteId, '<category id="category_'.$categoryId.'" />', 4);
                         }
+
                         $this->printLine($siteId, '</categories>', 3);
                     }
 
@@ -174,6 +176,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         foreach (explode(',', $keywords) as $keyword) {
                             $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
                         }
+
                         $this->printLine($siteId, '</keywords>', 3);
                     }
 
@@ -184,13 +187,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                             ->getUsedProductCollection($product)
                             ->addAttributeToSelect('*');
 
-                        if (count($childProducts) > 0) {
+                        if (! empty($childProducts)) {
                             foreach ($childProducts as $childProduct) {
                                 $this->printLine($siteId, '<variant>', 4);
 
                                 $this->printLine($siteId, '<id>' . $childProduct->getId() . '</id>', 5);
 
-                                foreach($attribute_codes as $attribute) {
+                                foreach ($attribute_codes as $attribute) {
                                     $attribute = trim($attribute);
 
                                     if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
@@ -230,7 +233,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<id>' . $product->getId() . '</id>', 5);
 
-                        foreach($attribute_codes as $attribute) {
+                        foreach ($attribute_codes as $attribute) {
                             $attribute = trim($attribute);
 
                             if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
@@ -324,8 +327,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
              ->addMinimalPrice()
              ->setPageSize($pageSize);  // Sets number of products to 1000
 
-        if (!empty($curPage))
-        {
+        if (! empty($curPage)) {
             $collection->setCurPage($curPage);
             $collection->setPageSize($pageSize);
         }
@@ -337,16 +339,11 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
     protected function getProductPrice($product, $currency, $bundlePriceModel)
     {
-        switch($product->getTypeId())
-        {
+        switch ($product->getTypeId()) {
             case 'grouped':
                 return Mage::helper('tax')->getPrice($product, $product->getMinimalPrice());
-            break;
-
             case 'bundle':
-                return $bundlePriceModel->getTotalPrices($product,'min',1);
-            break;
-
+                return $bundlePriceModel->getTotalPrices($product, 'min', 1);
             default:
                 return Mage::helper('tax')->getPrice($product, $product->getPrice());
         }
@@ -358,12 +355,8 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         {
             case 'grouped':
                 return Mage::helper('tax')->getPrice($product, $product->getMinimalPrice());
-            break;
-
             case 'bundle':
-                return $bundlePriceModel->getTotalPrices($product,'min',1);
-            break;
-
+                return $bundlePriceModel->getTotalPrices($product, 'min', 1);
             default:
                 if ($product->getSpecialPrice()) {
                     return Mage::helper('tax')->getPrice($product, $product->getSpecialPrice());

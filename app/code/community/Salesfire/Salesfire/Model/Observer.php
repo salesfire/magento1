@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.5
+ * @version.   1.2.8
  */
 class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
 {
@@ -17,7 +17,7 @@ class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
      */
     public function controllerFrontInitBefore(Varien_Event_Observer $observer)
     {
-        spl_autoload_register( array($this, 'load'), true, true );
+        spl_autoload_register(array($this, 'load'), true, true);
     }
 
     /**
@@ -26,13 +26,12 @@ class Salesfire_Salesfire_Model_Observer extends Varien_Event_Observer
      *
      * @param string $class
      */
-    public static function load( $class )
+    public static function load($class)
     {
-        if ( preg_match( '#^(Salesfire\\\\)\b#', $class ) ) {
-            $phpFile = Mage::getBaseDir('lib') . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array('Salesfire', 'Salesfire', 'src')) . DIRECTORY_SEPARATOR . str_replace( '\\', DIRECTORY_SEPARATOR, preg_replace( '/^Salesfire\\\\/i', '', $class ) ) . '.php';
+        if (preg_match('#^(Salesfire\\\\)\b#', $class)) {
+            $phpFile = Mage::getBaseDir('lib') . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array('Salesfire', 'Salesfire', 'src')) . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, preg_replace('/^Salesfire\\\\/i', '', $class)) . '.php';
 
-            require_once( $phpFile );
+            require_once($phpFile);
         }
     }
-
 }
