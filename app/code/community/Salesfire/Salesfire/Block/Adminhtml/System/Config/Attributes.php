@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.7
+ * @version    1.2.8
  */
 class Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes
 {
