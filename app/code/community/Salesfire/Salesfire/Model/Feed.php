@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.8
+ * @version.   1.2.9
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -196,11 +196,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                 foreach ($attribute_codes as $attribute) {
                                     $attribute = trim($attribute);
 
-                                    if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
+                                    if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
                                         continue;
                                     }
 
-                                    $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
+                                    $attributeObj = $childProduct->getResource()->getAttribute($attribute);
+                                    if (! $attributeObj) {
+                                        continue;
+                                    }
+
+                                    $text = $attributeObj->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
                                     if ($text != 'No') {
                                         $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
@@ -236,11 +241,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         foreach ($attribute_codes as $attribute) {
                             $attribute = trim($attribute);
 
-                            if (in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
+                            if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'link', 'image', 'stock', $colour_code, $gender_code, $age_group_code, $brand_code))) {
                                 continue;
                             }
 
-                            $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
+                            $attributeObj = $product->getResource()->getAttribute($attribute);
+                            if (! $attributeObj) {
+                                continue;
+                            }
+
+                            $text = $attributeObj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if ($text != 'No') {
                                 $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
