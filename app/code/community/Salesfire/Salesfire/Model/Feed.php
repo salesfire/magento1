@@ -226,8 +226,21 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
                                 $image = $childProduct->getImage();
-                                if (! empty($image)) {
-                                    $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
+                                if (empty($image)) {
+                                    $image = $childProduct->getThumbnail();
+                                }
+
+                                if (empty($image)) {
+                                    $image = $childProduct->getSmallImage();
+                                }
+
+                                if (empty($image)) {
+                                    $image = Mage::getModel('catalog/product')->load($childProduct->getId())->getMediaGalleryImages()->getFirstItem()['url'];
+                                    if (! empty($image)) {
+                                        $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                                    }
+                                } else {
+                                    $this->printLine($siteId, '<image>' . Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image) . '</image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -271,8 +284,21 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
                         $image = $product->getImage();
-                        if (! empty($image)) {
-                            $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
+                        if (empty($image)) {
+                            $image = $product->getThumbnail();
+                        }
+
+                        if (empty($image)) {
+                            $image = $product->getSmallImage();
+                        }
+
+                        if (empty($image)) {
+                            $image = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages()->getFirstItem()['url'];
+                            if(! empty($image)) {
+                                $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                            }
+                        } else {
+                            $this->printLine($siteId, '<image>' . Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image) . '</image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
