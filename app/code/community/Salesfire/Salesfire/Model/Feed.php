@@ -127,7 +127,8 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                     $this->printLine($siteId, '<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3);
 
-                    $this->printLine($siteId, '<description><![CDATA[' . $this->escapeString(substr(Mage::helper('core')->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3);
+                    $description = $product->getDescription() ?: $product->getShortDescription();
+                    $this->printLine($siteId, '<description><![CDATA[' . $this->escapeString(substr(Mage::helper('core')->escapeHtml(strip_tags($description)), 0, 5000)) . ']]></description>', 3);
 
                     $this->printLine($siteId, '<price currency="' . $currency . '">' . $this->getProductPrice($product, $currency, $bundlePriceModel) . '</price>', 3);
 
