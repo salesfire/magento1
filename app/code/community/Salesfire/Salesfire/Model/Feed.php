@@ -236,11 +236,12 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 if (empty($image)) {
                                     $image = Mage::getModel('catalog/product')->load($childProduct->getId())->getMediaGalleryImages()->getFirstItem()['url'];
-                                    if (! empty($image)) {
-                                        $this->printLine($siteId, '<image>' . $image . '</image>', 5);
-                                    }
                                 } else {
-                                    $this->printLine($siteId, '<image>' . Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image) . '</image>', 5);
+                                    $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
+                                }
+
+                                if (! empty($image)) {
+                                    $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -294,11 +295,12 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         if (empty($image)) {
                             $image = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages()->getFirstItem()['url'];
-                            if(! empty($image)) {
-                                $this->printLine($siteId, '<image>' . $image . '</image>', 5);
-                            }
                         } else {
-                            $this->printLine($siteId, '<image>' . Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image) . '</image>', 5);
+                            $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
+                        }
+
+                        if (! empty($image)) {
+                            $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
