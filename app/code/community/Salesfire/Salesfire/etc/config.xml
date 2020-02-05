@@ -5,13 +5,13 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.9
+ * @version    1.2.10
  */
 -->
 <config>
     <modules>
         <Salesfire_Salesfire>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </Salesfire_Salesfire>
     </modules>
 
