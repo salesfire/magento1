@@ -1,5 +1,35 @@
 # Changelog
 
+### Salesfire v1.2.10
+Released on 2020-01-24
+Release notes:
+
+- Fix image and description sourcing issue
+
+
+### Salesfire v1.2.9
+Released on 2020-01-24
+Release notes:
+
+- Fix attribute issue
+
+
+### Salesfire v1.2.8
+Released on 2020-01-21
+Release notes:
+
+- Fix php syntax
+
+
+### Salesfire v1.2.7
+Released on 2020-01-21
+Release notes:
+
+- Add dropdown options to admin
+- Fix issue with config attributes
+- Improve error handling
+
+
 ### Salesfire v1.2.6
 Released on 2020-01-10
 Release notes:
