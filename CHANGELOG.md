@@ -1,5 +1,13 @@
 # Changelog
 
+### Salesfire v1.2.11
+Released on 2020-02-07
+Release notes:
+
+- Add description and image code options
+- Improve error handling
+
+
 ### Salesfire v1.2.10
 Released on 2020-01-24
 Release notes:

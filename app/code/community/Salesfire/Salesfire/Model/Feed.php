@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.10
+ * @version.   1.2.11
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
