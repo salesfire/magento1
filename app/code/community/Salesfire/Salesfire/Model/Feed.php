@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.11
+ * @version.   1.2.12
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -58,7 +58,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             $colour_code        = Mage::helper('salesfire')->getColourCode($storeId);
             $attribute_codes    = Mage::helper('salesfire')->getAttributeCodes($storeId);
             $default_brand      = Mage::helper('salesfire')->getDefaultBrand($storeId);
-            $description_code   = Mage::helper('salesfire')->getDescriptionCode($storeId);
 
             @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
 
@@ -216,7 +215,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 if (! empty($colour_code)) {
                                     $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
-                                    if (! empty($color)) {
+                                    if (! empty($colour)) {
                                         $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
                                 }
@@ -255,7 +254,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         if (! empty($colour_code)) {
                             $colour = $this->getAttributeValue($storeId, $product, $colour_code);
-                            if (! empty($color)) {
+                            if (! empty($colour)) {
                                 $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                             }
                         }
@@ -407,7 +406,37 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             }
         }
 
-        if (! empty($image)) {
+        if (empty($image)) {
+            $image = $childProduct->getThumbnail();
+            if (empty($image) || $image == 'no_selection') {
+                $image = $product->getThumbnail();
+                if ($image == 'no_selection') {
+                    $image = null;
+                }
+            }
+        }
+
+        if (empty($image)) {
+            $image = $childProduct->getSmallImage();
+            if (empty($image) || $image == 'no_selection') {
+                $image = $product->getSmallImage();
+                if ($image == 'no_selection') {
+                    $image = null;
+                }
+            }
+        }
+
+        if (empty($image)) {
+            $firstImage = $childProduct->getMediaGalleryImages()->getFirstItem();
+            if ($firstImage) {
+                $image = $firstImage['url'];
+            } else {
+                $firstImage = $product->getMediaGalleryImages()->getFirstItem();
+                if ($firstImage) {
+                    $image = $firstImage['url'];
+                }
+            }
+        } else {
             $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
         }
 
