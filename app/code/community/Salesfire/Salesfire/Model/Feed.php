@@ -59,7 +59,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             $attribute_codes    = Mage::helper('salesfire')->getAttributeCodes($storeId);
             $default_brand      = Mage::helper('salesfire')->getDefaultBrand($storeId);
             $description_code   = Mage::helper('salesfire')->getDescriptionCode($storeId);
-            $image_code         = Mage::helper('salesfire')->getImageCode($storeId);
 
             @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
 
@@ -228,31 +227,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                                $image = null;
-                                if (! empty($image_code)) {
-                                    $image = $this->getAttributeValue($storeId, $childProduct, $image_code);
-                                    if (! empty($image)) {
-                                        $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                                    }
-                                }
-
-                                if (empty($image)) {
-                                    $image = $childProduct->getImage();
-                                    if (empty($image)) {
-                                        $image = $childProduct->getThumbnail();
-                                    }
-
-                                    if (empty($image)) {
-                                        $image = $childProduct->getSmallImage();
-                                    }
-
-                                    if (empty($image)) {
-                                        $image = Mage::getModel('catalog/product')->load($childProduct->getId())->getMediaGalleryImages()->getFirstItem()['url'];
-                                    } else {
-                                        $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                                    }
-                                }
-
+                                $image = $this->getProductImage($storeId, $product, $childProduct);
                                 if (! empty($image)) {
                                     $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                 }
@@ -291,31 +266,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                        $image = null;
-                        if (! empty($image_code)) {
-                            $image = $this->getAttributeValue($storeId, $product, $image_code);
-                            if (! empty($image)) {
-                                $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                            }
-                        }
-
-                        if (empty($image)) {
-                            $image = $product->getImage();
-                            if (empty($image)) {
-                                $image = $product->getThumbnail();
-                            }
-
-                            if (empty($image)) {
-                                $image = $product->getSmallImage();
-                            }
-
-                            if (empty($image)) {
-                                $image = Mage::getModel('catalog/product')->load($product->getId())->getMediaGalleryImages()->getFirstItem()['url'];
-                            } else {
-                                $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                            }
-                        }
-
+                        $image = $this->getProductImage($storeId, $product, $product);
                         if (! empty($image)) {
                             $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                         }
@@ -426,11 +377,40 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         if(! empty($attribute_obj)) {
             $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
-            if ($attribute_text != 'No') {
+            if ($attribute_text != 'No' && $attribute_text != 'no_selection') {
                 return $attribute_text;
             }
         }
 
         return null;
+    }
+
+    protected function getProductImage($storeId, $product, $childProduct) {
+        $image_code = Mage::helper('salesfire')->getImageCode($storeId);
+
+        $image = null;
+        if (! empty($image_code)) {
+            $image = $this->getAttributeValue($storeId, $childProduct, $image_code);
+
+            if (empty($image)) {
+                $image = $this->getAttributeValue($storeId, $product, $image_code);
+            }
+        }
+
+        if (empty($image)) {
+            $image = $childProduct->getImage();
+            if (empty($image) || $image == 'no_selection') {
+                $image = $product->getImage();
+                if ($image == 'no_selection') {
+                    $image = null;
+                }
+            }
+        }
+
+        if (! empty($image)) {
+            $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
+        }
+
+        return $image;
     }
 }
