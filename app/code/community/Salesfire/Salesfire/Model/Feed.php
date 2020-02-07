@@ -233,7 +233,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                     $image = $this->getAttributeValue($storeId, $childProduct, $image_code);
                                     if (! empty($image)) {
                                         $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                                        $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                     }
                                 }
 
@@ -252,10 +251,10 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                                     } else {
                                         $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
                                     }
+                                }
 
-                                    if (! empty($image)) {
-                                        $this->printLine($siteId, '<image>' . $image . '</image>', 5);
-                                    }
+                                if (! empty($image)) {
+                                    $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -297,7 +296,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                             $image = $this->getAttributeValue($storeId, $product, $image_code);
                             if (! empty($image)) {
                                 $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
-                                $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                             }
                         }
 
@@ -316,10 +314,10 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                             } else {
                                 $image = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($image);
                             }
+                        }
 
-                            if (! empty($image)) {
-                                $this->printLine($siteId, '<image>' . $image . '</image>', 5);
-                            }
+                        if (! empty($image)) {
+                            $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
