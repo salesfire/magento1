@@ -12,15 +12,17 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Config paths for using throughout the code
      */
-    const XML_PATH_GENERAL_ENABLED      = 'salesfire/general/is_enabled';
-    const XML_PATH_GENERAL_SITE_ID      = 'salesfire/general/site_id';
-    const XML_PATH_FEED_ENABLED         = 'salesfire/feed/is_enabled';
-    const XML_PATH_FEED_DEFAULT_BRAND   = 'salesfire/feed/default_brand';
-    const XML_PATH_FEED_BRAND_CODE      = 'salesfire/feed/brand_code';
-    const XML_PATH_FEED_GENDER_CODE     = 'salesfire/feed/gender_code';
-    const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
-    const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
-    const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
+    const XML_PATH_GENERAL_ENABLED          = 'salesfire/general/is_enabled';
+    const XML_PATH_GENERAL_SITE_ID          = 'salesfire/general/site_id';
+    const XML_PATH_FEED_ENABLED             = 'salesfire/feed/is_enabled';
+    const XML_PATH_FEED_DEFAULT_BRAND       = 'salesfire/feed/default_brand';
+    const XML_PATH_FEED_BRAND_CODE          = 'salesfire/feed/brand_code';
+    const XML_PATH_FEED_DESCRIPTION_CODE    = 'salesfire/feed/description_code';
+    const XML_PATH_FEED_IMAGE_CODE          = 'salesfire/feed/image_code';
+    const XML_PATH_FEED_GENDER_CODE         = 'salesfire/feed/gender_code';
+    const XML_PATH_FEED_COLOUR_CODE         = 'salesfire/feed/colour_code';
+    const XML_PATH_FEED_AGE_GROUP_CODE      = 'salesfire/feed/age_group_code';
+    const XML_PATH_FEED_ATTRIBUTE_CODES     = 'salesfire/feed/attribute_codes';
 
     protected static $errorHandlerEnabled = false;
 
@@ -91,6 +93,28 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     public function getBrandCode($storeId = null)
     {
         return trim(Mage::getStoreConfig(self::XML_PATH_FEED_BRAND_CODE, $storeId));
+    }
+
+    /**
+     * Get the product description attribute code
+     *
+     * @param string $storeId
+     * @return string
+     */
+    public function getDescriptionCode($storeId = null)
+    {
+        return trim(Mage::getStoreConfig(self::XML_PATH_FEED_DESCRIPTION_CODE, $storeId));
+    }
+
+    /**
+     * Get the product image attribute code
+     *
+     * @param string $storeId
+     * @return string
+     */
+    public function getImageCode($storeId = null)
+    {
+        return trim(Mage::getStoreConfig(self::XML_PATH_FEED_IMAGE_CODE, $storeId));
     }
 
     /**

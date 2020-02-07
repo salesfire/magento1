@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.7
+ * @version    1.2.11
  */
 -->
 <config>
@@ -108,10 +108,30 @@
                             <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
                             <comment>Let Salesfire know which of your attributes is the Brand. For example, sometimes it's called manufacturer.</comment>
                         </brand_code>
+                        <description_code translate="label">
+                            <label>Description Attribute Code</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is the description.</comment>
+                        </description_code>
+                        <image_code translate="label">
+                            <label>Image Attribute Code</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>Salesfire_Salesfire_Block_Adminhtml_System_Config_Attributes</source_model>
+                            <comment>Let Salesfire know which of your attributes is the base image.</comment>
+                        </image_code>
                         <gender_code translate="label">
                             <label>Gender Attribute Code</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>40</sort_order>
+                            <sort_order>60</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -121,7 +141,7 @@
                         <age_group_code translate="label">
                             <label>Age Group Attribute Code</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>50</sort_order>
+                            <sort_order>70</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -131,7 +151,7 @@
                         <colour_code translate="label">
                             <label>Colour Attribute Code</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>60</sort_order>
+                            <sort_order>80</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -141,7 +161,7 @@
                         <attribute_codes translate="label">
                             <label>Additional Attribute Codes</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>70</sort_order>
+                            <sort_order>90</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -150,7 +170,7 @@
                         <feed_url translate="label">
                             <label>Feed URL</label>
                             <frontend_model>salesfire/adminhtml_system_config_feed</frontend_model>
-                            <sort_order>80</sort_order>
+                            <sort_order>100</sort_order>
                             <show_in_default>0</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
