@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.12
+Released on 2020-02-07
+Release notes:
+
+- Fix issue with missing single images
+
+
 ### Salesfire v1.2.11
 Released on 2020-02-07
 Release notes:
