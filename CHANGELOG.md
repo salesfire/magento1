@@ -6,6 +6,7 @@ Release notes:
 
 - Add description and image code options
 - Improve error handling
+- Fix issue with missing images
 
 
 ### Salesfire v1.2.10
