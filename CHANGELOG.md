@@ -4,7 +4,7 @@
 Released on 2020-02-10
 Release notes:
 
-- Fix issue media gallary
+- Fix issue with media gallery not loading
 
 
 ### Salesfire v1.2.12
