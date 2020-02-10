@@ -68,7 +68,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             $brands = array();
 
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'">', 0);
+            $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'" version="'.Mage::helper('salesfire')->getVersion().'">', 0);
 
             $categories = $this->getCategories($storeId);
 

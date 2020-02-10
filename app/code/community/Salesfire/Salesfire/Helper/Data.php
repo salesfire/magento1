@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.2.8
+ * @version    1.2.13
  */
 class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -27,6 +27,16 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
     protected static $errorHandlerEnabled = false;
 
     protected static $errorHandlerRegistered = false;
+
+    /**
+     * What version of salesfire are we using
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return '1.2.13';
+    }
 
     /**
      * Whether salesfire is ready to use
