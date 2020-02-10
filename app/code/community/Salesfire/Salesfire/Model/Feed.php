@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.12
+ * @version.   1.2.13
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -339,6 +339,11 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
         $collection->clear();
 
+        $backendModel = $collection->getResource()->getAttribute('media_gallery')->getBackend();
+        foreach($collection as $product){
+            $backendModel->afterLoad($product);
+        }
+
         return $collection;
     }
 
@@ -427,11 +432,13 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         }
 
         if (empty($image)) {
-            $firstImage = $childProduct->getMediaGalleryImages()->getFirstItem();
-            if ($firstImage) {
-                $image = $firstImage['url'];
-            } else {
-                $firstImage = $product->getMediaGalleryImages()->getFirstItem();
+            $imageGallery = $childProduct->getMediaGalleryImages();
+            if (empty($imageGallery)) {
+                $imageGallery = $product->getMediaGalleryImages();
+            }
+
+            if (! empty($imageGallery)) {
+                $firstImage = $imageGallery->getFirstItem();
                 if ($firstImage) {
                     $image = $firstImage['url'];
                 }
