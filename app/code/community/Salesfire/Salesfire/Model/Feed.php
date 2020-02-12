@@ -116,6 +116,8 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                 $products = $this->getVisibleProducts($storeId, $page);
                 $count = count($products);
 
+                $backendModel = $products->getResource()->getAttribute('media_gallery')->getBackend();
+
                 if ($page == 1 && $count) {
                     $this->printLine($siteId, '<products>', 1);
                 }
@@ -226,7 +228,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                                $image = $this->getProductImage($storeId, $product, $childProduct);
+                                $image = $this->getProductImage($storeId, $product, $childProduct, $backendModel);
                                 if (! empty($image)) {
                                     $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                 }
@@ -265,7 +267,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                        $image = $this->getProductImage($storeId, $product, $product);
+                        $image = $this->getProductImage($storeId, $product, $product, $backendModel);
                         if (! empty($image)) {
                             $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                         }
@@ -339,11 +341,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
         $collection->clear();
 
-        $backendModel = $collection->getResource()->getAttribute('media_gallery')->getBackend();
-        foreach($collection as $product){
-            $backendModel->afterLoad($product);
-        }
-
         return $collection;
     }
 
@@ -389,7 +386,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         return null;
     }
 
-    protected function getProductImage($storeId, $product, $childProduct) {
+    protected function getProductImage($storeId, $product, $childProduct, $backendModel) {
         $image_code = Mage::helper('salesfire')->getImageCode($storeId);
 
         $image = null;
@@ -432,13 +429,17 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         }
 
         if (empty($image)) {
+            $backendModel->afterLoad($childProduct);
             $imageGallery = $childProduct->getMediaGalleryImages();
-            if (empty($imageGallery)) {
+
+            if (! $imageGallery->getSize()) {
+                $backendModel->afterLoad($product);
                 $imageGallery = $product->getMediaGalleryImages();
             }
 
-            if (! empty($imageGallery)) {
+            if ($imageGallery->getSize()) {
                 $firstImage = $imageGallery->getFirstItem();
+                print_r($firstImage['url']);
                 if ($firstImage) {
                     $image = $firstImage['url'];
                 }
