@@ -439,7 +439,6 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
             if ($imageGallery->getSize()) {
                 $firstImage = $imageGallery->getFirstItem();
-                print_r($firstImage['url']);
                 if ($firstImage) {
                     $image = $firstImage['url'];
                 }
