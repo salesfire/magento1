@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.12
+ * @version.   1.2.13
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -68,7 +68,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             $brands = array();
 
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'">', 0);
+            $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'" version="'.Mage::helper('salesfire')->getVersion().'">', 0);
 
             $categories = $this->getCategories($storeId);
 
@@ -115,6 +115,8 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
             do {
                 $products = $this->getVisibleProducts($storeId, $page);
                 $count = count($products);
+
+                $backendModel = $products->getResource()->getAttribute('media_gallery')->getBackend();
 
                 if ($page == 1 && $count) {
                     $this->printLine($siteId, '<products>', 1);
@@ -226,7 +228,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                                $image = $this->getProductImage($storeId, $product, $childProduct);
+                                $image = $this->getProductImage($storeId, $product, $childProduct, $backendModel);
                                 if (! empty($image)) {
                                     $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                                 }
@@ -265,7 +267,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
 
-                        $image = $this->getProductImage($storeId, $product, $product);
+                        $image = $this->getProductImage($storeId, $product, $product, $backendModel);
                         if (! empty($image)) {
                             $this->printLine($siteId, '<image>' . $image . '</image>', 5);
                         }
@@ -384,7 +386,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         return null;
     }
 
-    protected function getProductImage($storeId, $product, $childProduct) {
+    protected function getProductImage($storeId, $product, $childProduct, $backendModel) {
         $image_code = Mage::helper('salesfire')->getImageCode($storeId);
 
         $image = null;
@@ -427,11 +429,16 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
         }
 
         if (empty($image)) {
-            $firstImage = $childProduct->getMediaGalleryImages()->getFirstItem();
-            if ($firstImage) {
-                $image = $firstImage['url'];
-            } else {
-                $firstImage = $product->getMediaGalleryImages()->getFirstItem();
+            $backendModel->afterLoad($childProduct);
+            $imageGallery = $childProduct->getMediaGalleryImages();
+
+            if (! $imageGallery->getSize()) {
+                $backendModel->afterLoad($product);
+                $imageGallery = $product->getMediaGalleryImages();
+            }
+
+            if ($imageGallery->getSize()) {
+                $firstImage = $imageGallery->getFirstItem();
                 if ($firstImage) {
                     $image = $firstImage['url'];
                 }

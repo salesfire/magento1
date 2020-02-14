@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.13
+Released on 2020-02-10
+Release notes:
+
+- Fix issue with media gallery not loading
+
+
 ### Salesfire v1.2.12
 Released on 2020-02-07
 Release notes:
