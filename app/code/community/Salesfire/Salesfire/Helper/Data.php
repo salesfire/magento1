@@ -35,7 +35,7 @@ class Salesfire_Salesfire_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getVersion()
     {
-        return '1.2.13';
+        return '1.2.14';
     }
 
     /**

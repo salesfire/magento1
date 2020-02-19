@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.14
+Released on 2020-02-19
+Release notes:
+
+- Added submodule direct to repository
+
+
 ### Salesfire v1.2.13
 Released on 2020-02-10
 Release notes:
