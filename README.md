@@ -1,3 +1,5 @@
+*This package is no longer maintained.*
+
 # Magento 1.x Salesfire Module
 Salesfire is a service that provides a number of tools that help to increase sales using various on site methods.
 
