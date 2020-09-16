@@ -5,7 +5,7 @@
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.13
+ * @version.   1.2.15
  */
 class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 {
@@ -93,7 +93,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                         $this->printLine($siteId, '<description><![CDATA['.$this->escapeString($description).']]></description>', 3);
                     }
 
-                    $this->printLine($siteId, '<link>' . $category->getUrl() . '</link>', 3);
+                    $this->printLine($siteId, '<link><![CDATA[' . $category->getUrl() . ']]></link>', 3);
 
                     $keywords = $category->getMetaKeywords();
                     if (! empty($keywords)) {
@@ -144,7 +144,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                     $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3);
 
-                    $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 3);
+                    $this->printLine($siteId, '<link><![CDATA[' . $product->getProductUrl() . ']]></link>', 3);
 
                     if (! empty($gender_code)) {
                         $gender = $this->getAttributeValue($storeId, $product, $gender_code);
@@ -163,10 +163,10 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
                     if (! empty($brand_code)) {
                         $brand = $this->getAttributeValue($storeId, $product, $brand_code);
                         if(! empty($brand)) {
-                            $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
+                            $this->printLine($siteId, '<brand><![CDATA[' . $this->escapeString($brand) . ']]></brand>', 3);
                         }
                     } else if (! empty($default_brand)) {
-                        $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
+                        $this->printLine($siteId, '<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3);
                     }
 
                     $categories = $product->getCategoryIds();
@@ -226,11 +226,11 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $this->printLine($siteId, '<stock>'.($childProduct->getStockItem() && $childProduct->getStockItem()->getIsInStock() ? ($childProduct->getStockItem()->getQty() > 0 ? (int) $childProduct->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
-                                $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
+                                $this->printLine($siteId, '<link><![CDATA[' . $product->getProductUrl() . ']]></link>', 5);
 
                                 $image = $this->getProductImage($storeId, $product, $childProduct, $backendModel);
                                 if (! empty($image)) {
-                                    $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                                    $this->printLine($siteId, '<image><![CDATA[' . $image . ']]></image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -265,11 +265,11 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $this->printLine($siteId, '<stock>'.($product->getStockItem() && $product->getStockItem()->getIsInStock() ? ($product->getStockItem()->getQty() > 0 ? (int) $product->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
 
-                        $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
+                        $this->printLine($siteId, '<link><![CDATA[' . $product->getProductUrl() . ']]></link>', 5);
 
                         $image = $this->getProductImage($storeId, $product, $product, $backendModel);
                         if (! empty($image)) {
-                            $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                            $this->printLine($siteId, '<image><![CDATA[' . $image . ']]></image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);

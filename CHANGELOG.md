@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.15
+Released on 2020-09-16
+Release notes:
+
+- Added CDATA to attributes
+
 ### Salesfire v1.2.14
 Released on 2020-02-19
 Release notes:
