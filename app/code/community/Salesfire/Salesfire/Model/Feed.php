@@ -230,7 +230,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                                 $image = $this->getProductImage($storeId, $product, $childProduct, $backendModel);
                                 if (! empty($image)) {
-                                    $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                                    $this->printLine($siteId, '<image><![CDATA[' . $image . ']]></image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -269,7 +269,7 @@ class Salesfire_Salesfire_Model_Feed extends Mage_Core_Model_Abstract
 
                         $image = $this->getProductImage($storeId, $product, $product, $backendModel);
                         if (! empty($image)) {
-                            $this->printLine($siteId, '<image>' . $image . '</image>', 5);
+                            $this->printLine($siteId, '<image><![CDATA[' . $image . ']]></image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
