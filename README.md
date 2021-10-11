@@ -19,17 +19,6 @@ You can find out more information and even get a free trial at https://www.sales
 
 ## How to install
 
-### Method 1: Extension Manager
-
-1. Add Salesfire to your magento account (https://marketplace.magento.com/salesfire-salesfire.html)
-2. Copy the access keys URL from within your magento marketplace account (Similar to https://connect20.magentocommerce.com/xxxx/salesfire+Salesfire-1.0.1)
-3. Navigate to the Magento Connect Manager within your store admin (System > Magento Connect > Magento Connect Manager)
-4. Paste the previously copied access keys URL into the `Install New Extensions` section then click Install
-5. Click Proceed which will appear below to continue the install
-6. Continue to setup
-
-### Method 2: Manual install
-
 1. Access to your server via SSH
 2. Download the zip package at https://github.com/salesfire/magento1/archive/master.zip and unzip
 3. Copy the `app` and `lib` folder to the root directory of your magento store
